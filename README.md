@@ -189,6 +189,16 @@ fn test_meta_environment_variable() {
     remove_var("INLINE_C_RS_FOO");
 }
 ```
+Note: If you have multiple inline C tests that use the same environment 
+variables, you may see flakiness in test runs because by default `cargo test` 
+runs tests parallely. This problem can occur even if your tests are removing 
+the environment variables during teardown. To fix this, you can do either 
+of the following:
+
+- Use unique environment variable names for each test
+- (Not recommended for Production) Run the tests serially instead of parallely. 
+You can use the following command: `cargo test -- --test-threads=1` 
+
 
 #### `CFLAGS`, `CPPFLAGS`, `CXXFLAGS` and `LDFLAGS`
 
