@@ -336,16 +336,6 @@ is consumed by the Rust lexer. The best workaround is to define the
 macro in another `.h` file, and to include it with the `#include`
 directive.
 
-## Who is using it?
-
-* [Wasmer](https://github.com/wasmerio/wasmer), the leading
-  WebAssembly runtime,
-* [Cargo C](https://github.com/lu-zero/cargo-c), to build and install
-  C-compatible libraries; it configures `inline-c` for you when using
-  `cargo ctest`!
-* [Biscuit](https://github.com/CleverCloud/biscuit-rust), an
-  authorization token microservices architectures.
-
 ## License
 
 `BSD-3-Clause`, see `LICENSE.md`.
