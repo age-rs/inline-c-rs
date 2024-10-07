@@ -1,5 +1,7 @@
 //! Please see the `inline-c` crate to learn more.
 
+#![cfg_attr(nightly, feature(proc_macro_span))]
+
 use proc_macro2::TokenStream;
 use quote::quote;
 
@@ -114,14 +116,18 @@ fn reconstruct(input: TokenStream) -> String {
 
                                 #[cfg(nightly)]
                                 {
-                                    let current_line = define.span().start().line;
+                                    // `Span::start()` doesn't work on `proc_macro2`, we need to fallback to
+                                    // `proc_macro` itself, see https://github.com/dtolnay/proc-macro2/issues/402.
+                                    let current_line = define.span().unwrap().start().line();
                                     iterator.next();
                                     output.push_str("define ");
 
                                     loop {
                                         match iterator.peek() {
                                             Some(item) => {
-                                                if item.span().start().line == current_line {
+                                                if item.span().unwrap().start().line()
+                                                    == current_line
+                                                {
                                                     output.push_str(&item.to_string());
                                                     iterator.next();
                                                 } else {

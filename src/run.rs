@@ -200,7 +200,6 @@ fn command_add_linker_flags_msvc(command: &mut Command, variables: &HashMap<Stri
 mod tests {
     use super::*;
     use crate::predicates::*;
-    use std::env::{remove_var, set_var};
 
     #[test]
     fn test_run_c() {
@@ -220,8 +219,12 @@ mod tests {
         .success()
         .stdout(predicate::eq("Hello, World!\n").normalize());
     }
+
+    #[cfg(not(target_os = "macos"))] // macOS doesn't support `--defsym`
     #[test]
     fn test_run_c_ldflags() {
+        use std::env::{remove_var, set_var};
+
         let host = target_lexicon::HOST.to_string();
         let msvc = host.contains("msvc");
         if msvc {
